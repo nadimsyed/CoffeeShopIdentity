@@ -7,11 +7,11 @@ using System.Web.Mvc;
 
 namespace CoffeeShopIdentity.Controllers
 {
+    [Authorize]
     public class MenuController : Controller
     {
         private ItemDAO dao = new ItemDAO();
 
-        // GET: Menu
         public ActionResult Index()
         {
             //if (Session["Cart"] == null)
