@@ -1,0 +1,104 @@
+﻿@model IEnumerable<CoffeeShopIdentity.Models.Item>
+@using CoffeeShopIdentity.Models;
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<table class="table">
+    <tr>
+        <th>
+            <a href="~/Menu/ItemSort?column=Name">@Html.DisplayNameFor(model => model.Name)</a>
+        </th>
+        <th>
+            <a href="~/Menu/ItemSort?column=Description">@Html.DisplayNameFor(model => model.Description)</a>
+        </th>
+        <th>
+            <a href="~/Menu/ItemSort?column=Price">@Html.DisplayNameFor(model => model.Price)</a>
+        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>*@
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>*@
+            @*<td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ItemId }, new { @class = "btn btn-primary" }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ItemId }, new { @class = "btn btn-primary" })
+                    <button onclick="return ConfirmDelete()">@Html.ActionLink("Delete", "DeleteConfirmed", new { id = item.ItemId }) </button>
+                </td>*@
+
+            @*insert below after ItemId*@
+            @*&quantity=@(item.Quantity+=1)*@
+            <td><a href="~/Menu/Add?id=@item.ItemId" class="btn btn-primary">Add to Bag</a></td>
+        </tr>
+    }
+
+</table><br /><br />
+@*<form action="/" method="post">
+        <label>Enter Quantity desired of item you will add</label>
+        <input type="number" name="quantity" min="1" />
+    </form>*@
+<br /><br />
+<a href="~/Menu/Add?id=0" class="btn btn-primary">Go To Cart</a>
+
+
+<!-- Trigger the modal with a button -->
+<button type="button" style="margin-left:637px" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Shopping Cart Modal View</button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="text-align:center">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Shopping Cart</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <ul>
+                        @if (@*(string)*@Session["Cart"] == null)
+        {
+            <li>Cart is empty</li>
+        }
+        else
+        {
+            var sum = 0.00;
+            foreach (Item i in (List<Item>)Session["Cart"])
+            {
+                <li>@i.Name which has a description of "@i.Description"  <br />   Price: @i.Price  @*Quantity: @i.Quantity*@</li>
+                var convert = i.Price;
+                sum += double.Parse(convert);
+            }
+            <li>Total for Cart: @sum</li>
+        }
+                    </ul>
+
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

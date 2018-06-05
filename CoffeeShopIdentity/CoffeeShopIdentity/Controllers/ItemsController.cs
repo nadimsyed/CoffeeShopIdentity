@@ -12,84 +12,114 @@ namespace CoffeeShopIdentity.Controllers
 {
     public class ItemsController : Controller
     {
+        //TODO: Try to incorporate a try-catch as last challenge to have a more user friendly way of dealing with errors for protection
         private ItemDAO dao = new ItemDAO();
 
-        // GET: Menu
+
+        // GET: Items
         public ActionResult Index()
         {
-            //if (Session["Cart"] == null)
-            //{
-            //    List<Item> item = new List<Item>();
-            //    Item x = null;
-            //    item.Add(x);
-            //    Session["Cart"] = item;
-            //    return View(dao.GetItemList(), (List<Item>)Session["Cart"]);
-            //}
             return View(dao.GetItemList());
         }
 
-        public ActionResult ItemSort(string column)
+        // GET: Items/Details/5
+        public ActionResult Details(int? id)
         {
-            return View("Index", dao.ItemSort(column));
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Item item = dao.GetItem((int)id);
+            if (item == null)
+            {
+                return HttpNotFound();
+            }
+            return View(item);
         }
 
-        public ActionResult Add(int id = 0)/*, int quantity = 0)*/
+        // GET: Items/Create
+        public ActionResult Create()
         {
-            //dao.UpdateQuantity(id, quantity);
-            CoffeeShopEntities db = new CoffeeShopEntities();
-
-            if (id == 0 && Session["Cart"] != null)
-            {
-                //List<Item> cart = (List<Item>)(Session["Cart"]);
-                //Item item = ()
-                return View("Add", Session["Cart"]);
-            }
-            else if (id == 0)
-            {
-                //List<Item> cart = (List<Item>)(Session["Cart"]);
-                //Item item = ()
-                return View("Add", Session["Cart"] = null);
-            }
-            else
-            {
-                //Check if the Cart already exists
-                if (Session["Cart"] == null)
-                {
-                    //if it doesn't make a new list of books
-
-                    List<Item> cart = new List<Item>();
-                    //add this book to it
-                    cart.Add((from i in db.Items
-                              where i.ItemId == id
-                              select i).Single());
-
-                    //add the list to the session
-                    Session.Add("Cart", cart);
-                }
-                else
-                {
-                    //if it does exist need to get the list
-                    List<Item> cart = (List<Item>)(Session["Cart"]);
-                    //add this book to the list
-                    cart.Add((from b in db.Items
-                              where b.ItemId == id
-                              select b).Single());
-                    //add the list to the session
-                    //Session["Cart"] = cart;
-                }
-
-                return View();
-            }
-        }
-
-        public ActionResult Clear()
-        {
-            Session.Clear();
-            //for (int i = 0; i < dao.GetListLength(); i++)
-            //{
-            //    dao.UpdateQuantity(i, 0);
-            //}
             return View();
+        }
+
+        // POST: Items/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "ItemId,Name,Description,Quantity,Price")] Item item)
+        {
+            if (ModelState.IsValid)
+            {
+                dao.AddItem(item);
+                return RedirectToAction("Index");
+            }
+
+            return View(item);
+        }
+
+        // GET: Items/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Item item = dao.GetItem((int)id);
+            if (item == null)
+            {
+                return HttpNotFound();
+            }
+            return View(item);
+        }
+
+        // POST: Items/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "ItemId,Name,Description,Quantity,Price")] Item item)
+        {
+            if (ModelState.IsValid)
+            {
+                dao.EditItem(item);
+                return RedirectToAction("Index");
+            }
+            return View(item);
+        }
+
+        // GET: Items/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Item item = dao.GetItem((int)id);
+            if (item == null)
+            {
+                return HttpNotFound();
+            }
+            return View(item);
+        }
+
+        // POST: Items/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            dao.DeleteItem(id);
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                dao.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
