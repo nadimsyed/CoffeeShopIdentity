@@ -1,0 +1,29 @@
+﻿@using CoffeeShopIdentity.Models;
+
+@{
+    ViewBag.Title = "Items Added";
+}
+
+<h2>Items Added</h2>
+
+
+Cart:
+<ul>
+    @if (Session["Cart"] == null)
+    {
+        <li>Cart is empty</li>
+    }
+    else
+    {
+        foreach (Item i in (List<Item>)Session["Cart"])
+        {
+            <li>@i.Name which has a descprition of "@i.Description"  <br />   Price: @i.Price</li>
+        }
+    }
+
+</ul>
+
+<a href="~/Menu/Index">Return to Menu page</a>
+<a href="~/Menu/Clear">Clear Cart</a>
+
+
