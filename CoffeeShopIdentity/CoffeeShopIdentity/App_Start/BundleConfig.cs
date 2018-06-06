@@ -24,7 +24,7 @@ namespace CoffeeShopIdentity
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap-cosmos.css",
+                      "~/Content/bootstrap-cyborg.css",
                       "~/Content/site.css"));
         }
     }
