@@ -35,6 +35,7 @@ namespace CoffeeShopIdentity.Controllers
             //dao.UpdateQuantity(id, quantity);
             CoffeeShopEntities db = new CoffeeShopEntities();
 
+            //int Quantity = 0;
             if (id == 0 && Session["Cart"] != null)
             {
                 //List<Item> cart = (List<Item>)(Session["Cart"]);
@@ -59,7 +60,7 @@ namespace CoffeeShopIdentity.Controllers
                     cart.Add((from i in db.Items
                               where i.ItemId == id
                               select i).Single());
-
+                    //cart[id] = cart[id] + Quantity++;
                     //add the list to the session
                     Session.Add("Cart", cart);
                 }
